@@ -1,0 +1,21 @@
+# See: https://asimov-specs.github.io/module-manifest/
+---
+name: mbox
+label: Mbox
+title: ASIMOV Mbox Module
+summary: Mbox email import.
+links:
+  - https://github.com/asimov-modules/asimov-mbox-module
+  - https://crates.io/crates/asimov-mbox-module
+
+provides:
+  programs:
+    - asimov-mbox-cataloger
+
+handles:
+  file_extensions:
+    - .mbox
+    - .mbx
+  content_types:
+   - application/mbox
+   - text/x-mail
