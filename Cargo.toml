@@ -13,7 +13,7 @@ homepage = "https://github.com/asimov-modules"
 repository = "https://github.com/asimov-modules/asimov-mbox-module"
 license = "Unlicense"
 keywords = ["asimov-module", "asimov", "ai"]
-categories = ["command-line-utilities", "text-processing"]           # TODO
+categories = ["command-line-utilities", "text-processing"]          # TODO
 publish = true
 
 [features]
@@ -26,6 +26,7 @@ unstable = []
 
 [dependencies]
 asimov-module = { version = "25.0.0-dev.13", default-features = false }
+chrono = "0.4"
 clap = { version = "4.5", default-features = false, features = [
     "std",
 ], optional = true }
@@ -33,6 +34,8 @@ clientele = { version = "0.3.8", default-features = false, features = [
     "clap",
     "std",
 ], optional = true }
+mailparse = "0.16"
+mbox-reader = "0.2"
 
 [profile.release]
 opt-level = "z"
