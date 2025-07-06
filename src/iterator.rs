@@ -8,7 +8,7 @@ pub struct MboxIterator<'a>(MboxReader<'a>);
 
 impl<'a> MboxIterator<'a> {
     pub fn new(inner: MboxReader<'a>) -> Self {
-        MboxIterator(inner)
+        Self(inner)
     }
 }
 

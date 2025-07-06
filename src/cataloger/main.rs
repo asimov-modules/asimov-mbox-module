@@ -7,6 +7,7 @@ use asimov_mbox_module::MboxReader;
 use asimov_module::SysexitsError::{self, *};
 use clap::Parser;
 use clientele::StandardOptions;
+use dogma::{Uri, UriScheme::File, UriValueParser};
 use std::error::Error;
 
 /// asimov-mbox-cataloger
@@ -17,7 +18,8 @@ struct Options {
     flags: StandardOptions,
 
     /// The path to the mbox to catalog
-    mbox: String,
+    #[arg(value_parser = UriValueParser::new(&[File]))]
+    mbox: Uri<'static>,
 }
 
 fn main() -> Result<SysexitsError, Box<dyn Error>> {
@@ -47,7 +49,7 @@ fn main() -> Result<SysexitsError, Box<dyn Error>> {
     asimov_module::init_tracing_subscriber(&options.flags).expect("failed to initialize logging");
 
     // Open the mbox file:
-    let mbox = MboxReader::open(options.mbox)?;
+    let mbox = MboxReader::open(options.mbox.path())?;
 
     // Scan the mbox messages:
     for entry in mbox.iter() {

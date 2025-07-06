@@ -19,8 +19,8 @@ publish = true
 [features]
 default = ["all", "cli", "std"]
 all = ["tracing"]
-cli = ["asimov-module/cli", "std", "dep:clap", "dep:clientele"]
-std = ["asimov-module/std"]
+cli = ["asimov-module/cli", "dogma/clap", "std", "dep:clap", "dep:clientele"]
+std = ["asimov-module/std", "dogma/std"]
 tracing = ["asimov-module/tracing", "clientele?/tracing"]
 unstable = []
 
@@ -34,6 +34,7 @@ clientele = { version = "0.3.8", default-features = false, features = [
     "clap",
     "std",
 ], optional = true }
+dogma = { version = "0.1.11", default-features = false, features = ["all"] }
 mailparse = "0.16"
 mbox-reader = "0.2"
 

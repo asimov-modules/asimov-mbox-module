@@ -20,6 +20,6 @@ impl TryFrom<Entry<'_>> for MboxMessage {
             .unwrap_or_default()
             .trim()
             .to_string();
-        Ok(MboxMessage { id })
+        Ok(Self { id })
     }
 }
