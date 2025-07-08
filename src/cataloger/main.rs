@@ -17,7 +17,11 @@ struct Options {
     #[clap(flatten)]
     flags: StandardOptions,
 
-    /// The path to the mbox to catalog
+    /// The maximum number of messages to catalog.
+    #[arg(short = 'n', long)]
+    limit: Option<usize>,
+
+    /// The `file:` URL to the mbox file to catalog.
     #[arg(value_parser = UriValueParser::new(&[File]))]
     mbox: Uri<'static>,
 }
@@ -52,7 +56,11 @@ fn main() -> Result<SysexitsError, Box<dyn Error>> {
     let mbox = MboxReader::open(options.mbox.path())?;
 
     // Scan the mbox messages:
-    for (index, entry) in mbox.iter().enumerate() {
+    for (index, entry) in mbox
+        .iter()
+        .take(options.limit.unwrap_or(usize::MAX))
+        .enumerate()
+    {
         let email = entry?;
         if index > 0 {
             println!();
