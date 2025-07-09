@@ -2,6 +2,8 @@
 
 use super::{MboxIterator, MboxMessage};
 use core::result::Result;
+use know::datatypes::EmailMessageId;
+use mailparse::MailParseError;
 use mbox_reader::MboxFile;
 use std::{io, path::Path};
 
@@ -16,7 +18,19 @@ impl MboxReader {
         })
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = Result<MboxMessage, mailparse::MailParseError>> {
+    pub fn iter(&self) -> impl Iterator<Item = Result<MboxMessage, MailParseError>> {
         MboxIterator::new(self.mbox.iter())
+    }
+
+    pub fn fetch(&self, mid: &EmailMessageId) -> Result<Option<MboxMessage>, MailParseError> {
+        for entry in self.iter() {
+            let message = entry?;
+            if let Some(message_id) = message.message.id.as_ref() {
+                if message_id == mid {
+                    return Ok(Some(message));
+                }
+            }
+        }
+        Ok(None)
     }
 }

@@ -35,7 +35,7 @@ clientele = { version = "0.3.8", default-features = false, features = [
     "std",
 ], optional = true }
 dogma = { version = "0.1.11", default-features = false, features = ["all"] }
-know = { version = "0.1.1", features = ["mailparse"] }
+know = { version = "0.1.2", features = ["mailparse"] }
 mailparse = "0.14"
 mbox-reader = "0.2"
 
@@ -47,4 +47,9 @@ lto = "thin"
 [[bin]]
 name = "asimov-mbox-cataloger"
 path = "src/cataloger/main.rs"
+required-features = ["cli"]
+
+[[bin]]
+name = "asimov-mbox-fetcher"
+path = "src/fetcher/main.rs"
 required-features = ["cli"]

@@ -1,33 +1,30 @@
 // This is free and unencumbered software released into the public domain.
 
 #[cfg(not(feature = "std"))]
-compile_error!("asimov-mbox-cataloger requires the 'std' feature");
+compile_error!("asimov-mbox-fetcher requires the 'std' feature");
 
 use asimov_mbox_module::MboxReader;
 use asimov_module::SysexitsError::{self, *};
 use clap::Parser;
 use clientele::StandardOptions;
 use dogma::{Uri, UriScheme::File, UriValueParser};
+use know::datatypes::EmailMessageId;
 use std::error::Error;
 
-/// asimov-mbox-cataloger
+/// asimov-mbox-fetcher
 #[derive(Debug, Parser)]
 #[command(arg_required_else_help = true)]
 struct Options {
     #[clap(flatten)]
     flags: StandardOptions,
 
-    /// The maximum number of messages to catalog.
-    #[arg(short = 'n', long)]
-    limit: Option<usize>,
-
     /// The output format.
     #[arg(short = 'o', long)]
     output: Option<String>,
 
-    /// A `file:/path/to/messages.mbox` URL to the file to catalog.
-    #[arg(id = "MBOX-FILE-URL", value_parser = UriValueParser::new(&[File]))]
-    mbox_url: Uri<'static>,
+    /// A `file:/path/to/messages.mbox#mid` URL to the message to fetch.
+    #[arg(id = "MBOX-MESSAGE-URL", value_parser = UriValueParser::new(&[File]))]
+    message_url: Uri<'static>,
 }
 
 fn main() -> Result<SysexitsError, Box<dyn Error>> {
@@ -57,20 +54,22 @@ fn main() -> Result<SysexitsError, Box<dyn Error>> {
     asimov_module::init_tracing_subscriber(&options.flags).expect("failed to initialize logging");
 
     // Open the mbox file:
-    let mbox = MboxReader::open(options.mbox_url.path())?;
+    let mbox = MboxReader::open(options.message_url.path())?;
 
-    // Scan the mbox messages:
-    for (index, entry) in mbox
-        .iter()
-        .take(options.limit.unwrap_or(usize::MAX))
-        .enumerate()
-    {
-        let email = entry?;
-        if index > 0 {
-            println!();
-        }
-        print!("{}", email.message);
+    // Fetch the mbox message:
+    let message_id: EmailMessageId = options
+        .message_url
+        .fragment_str()
+        .expect("message ID should be given in the URL fragment")
+        .into();
+    match mbox.fetch(&message_id)? {
+        Some(message) => {
+            print!("{}", message.message);
+            Ok(EX_OK)
+        },
+        None => {
+            eprintln!("message ID <{}> not found", message_id.as_str());
+            Ok(EX_NOINPUT)
+        },
     }
-
-    Ok(EX_OK)
 }
