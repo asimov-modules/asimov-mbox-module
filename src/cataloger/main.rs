@@ -18,15 +18,15 @@ struct Options {
     flags: StandardOptions,
 
     /// The maximum number of messages to catalog.
-    #[arg(short = 'n', long)]
+    #[arg(value_name = "COUNT", short = 'n', long)]
     limit: Option<usize>,
 
     /// The output format.
-    #[arg(short = 'o', long)]
+    #[arg(value_name = "FORMAT", short = 'o', long)]
     output: Option<String>,
 
     /// A `file:/path/to/messages.mbox` URL to the file to catalog.
-    #[arg(id = "MBOX-FILE-URL", value_parser = UriValueParser::new(&[File]))]
+    #[arg(value_name = "MBOX-FILE-URL", value_parser = UriValueParser::new(&[File]))]
     mbox_url: Uri<'static>,
 }
 
@@ -60,16 +60,36 @@ fn main() -> Result<SysexitsError, Box<dyn Error>> {
     let mbox = MboxReader::open(options.mbox_url.path())?;
 
     // Scan the mbox messages:
-    for (index, entry) in mbox
-        .iter()
-        .take(options.limit.unwrap_or(usize::MAX))
-        .enumerate()
+    let messages = mbox.iter().take(options.limit.unwrap_or(usize::MAX));
+    match options
+        .output
+        .as_ref()
+        .unwrap_or(&String::default())
+        .as_str()
     {
-        let email = entry?;
-        if index > 0 {
-            println!();
-        }
-        print!("{}", email.headers.detailed());
+        "jsonld" | "json" => {
+            use know::traits::ToJsonLd;
+            let mut output = Vec::new();
+            for message in messages {
+                let message = message?;
+                output.push(message.headers.to_jsonld()?);
+            }
+            if cfg!(feature = "pretty") {
+                colored_json::write_colored_json(&output, &mut std::io::stdout())?;
+                println!();
+            } else {
+                todo!() // TODO
+            }
+        },
+        _ => {
+            for (index, message) in messages.enumerate() {
+                let message = message?;
+                if index > 0 {
+                    println!();
+                }
+                print!("{}", message.headers.detailed());
+            }
+        },
     }
 
     Ok(EX_OK)

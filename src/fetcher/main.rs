@@ -19,11 +19,11 @@ struct Options {
     flags: StandardOptions,
 
     /// The output format.
-    #[arg(id = "FORMAT", short = 'o', long)]
-    output_format: Option<String>,
+    #[arg(value_name = "FORMAT", short = 'o', long)]
+    output: Option<String>,
 
     /// A `file:/path/to/messages.mbox#mid` URL to the message to fetch.
-    #[arg(id = "MBOX-MESSAGE-URL", value_parser = UriValueParser::new(&[File]))]
+    #[arg(value_name = "MBOX-MESSAGE-URL", value_parser = UriValueParser::new(&[File]))]
     message_url: Uri<'static>,
 }
 
@@ -64,7 +64,7 @@ fn main() -> Result<SysexitsError, Box<dyn Error>> {
         .into();
     match mbox.fetch(&message_id)? {
         Some(message) => {
-            match options.output_format.unwrap_or_default().as_str() {
+            match options.output.unwrap_or_default().as_str() {
                 "jsonld" | "json" => print!("{}", message.headers.jsonld()),
                 "mime" | _ => {
                     print!("{}", message.headers.mime());
