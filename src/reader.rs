@@ -1,9 +1,8 @@
 // This is free and unencumbered software released into the public domain.
 
-use super::{MboxIterator, MboxMessage};
+use super::{MboxError, MboxIterator, MboxMessage};
 use core::result::Result;
 use know::datatypes::EmailMessageId;
-use mailparse::MailParseError;
 use mbox_reader::MboxFile;
 use std::{io, path::Path};
 
@@ -18,15 +17,15 @@ impl MboxReader {
         })
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = Result<MboxMessage, MailParseError>> {
+    pub fn iter(&self) -> impl Iterator<Item = Result<MboxMessage, MboxError>> {
         MboxIterator::new(self.mbox.iter())
     }
 
-    pub fn fetch(&self, mid: &EmailMessageId) -> Result<Option<MboxMessage>, MailParseError> {
+    pub fn fetch(&self, message_id: &EmailMessageId) -> Result<Option<MboxMessage>, MboxError> {
         for entry in self.iter() {
             let message = entry?;
-            if let Some(message_id) = message.message.id.as_ref() {
-                if message_id == mid {
+            if let Some(mid) = message.headers.id.as_ref() {
+                if mid == message_id {
                     return Ok(Some(message));
                 }
             }

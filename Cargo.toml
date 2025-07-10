@@ -35,8 +35,8 @@ clientele = { version = "0.3.8", default-features = false, features = [
     "std",
 ], optional = true }
 dogma = { version = "0.1.11", default-features = false, features = ["all"] }
-know = { version = "0.1.2", features = ["mailparse"] }
-mailparse = "0.14"
+know = { version = "0.1.4", features = ["mail-parser"] }
+mail-parser = "0.11"
 mbox-reader = "0.2"
 
 [profile.release]
