@@ -13,9 +13,15 @@
 
 ## 🛠️ Prerequisites
 
-- [Rust](https://rust-lang.org) 1.85+ (2024 edition)
+- [Rust] 1.85+ (2024 edition) if building from source code
 
 ## ⬇️ Installation
+
+### Installation with the [ASIMOV CLI]
+
+```bash
+asimov module install mbox -v
+```
 
 ### Installation from Source Code
 
@@ -26,7 +32,56 @@ cargo install asimov-mbox-module
 ## 👉 Examples
 
 ```bash
+asimov-mbox-cataloger file:/path/to/messages.mbox
+```
+
+```bash
+asimov-mbox-fetcher file:/path/to/messages.mbox#mid
+```
+
+## ⚙ Configuration
+
+This module requires no configuration.
+
+## 📚 Reference
+
+### `asimov-mbox-cataloger`
+
+```
 asimov-mbox-cataloger
+
+Usage: asimov-mbox-cataloger [OPTIONS] <MBOX-FILE-URL>
+
+Arguments:
+  <MBOX-FILE-URL>  A `file:/path/to/messages.mbox` URL to the file to catalog
+
+Options:
+  -d, --debug            Enable debugging output
+      --license          Show license information
+  -v, --verbose...       Enable verbose output (may be repeated for more verbosity)
+  -V, --version          Print version information
+  -n, --limit <COUNT>    The maximum number of messages to catalog
+  -o, --output <FORMAT>  The output format
+  -h, --help             Print help
+```
+
+### `asimov-mbox-fetcher`
+
+```
+asimov-mbox-fetcher
+
+Usage: asimov-mbox-fetcher [OPTIONS] <MBOX-MESSAGE-URL>
+
+Arguments:
+  <MBOX-MESSAGE-URL>  A `file:/path/to/messages.mbox#mid` URL to the message to fetch
+
+Options:
+  -d, --debug            Enable debugging output
+      --license          Show license information
+  -v, --verbose...       Enable verbose output (may be repeated for more verbosity)
+  -V, --version          Print version information
+  -o, --output <FORMAT>  The output format
+  -h, --help             Print help
 ```
 
 ## 👨‍💻 Development
@@ -44,7 +99,9 @@ git clone https://github.com/asimov-modules/asimov-mbox-module.git
 [![Share on LinkedIn](https://img.shields.io/badge/share%20on-linkedin-3949AB?logo=linkedin)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/asimov-modules/asimov-mbox-module)
 
 [ASIMOV]: https://asimov.sh
+[ASIMOV CLI]: https://cli.asimov.sh
 [JSON-LD]: https://json-ld.org
 [KNOW]: https://know.dev
 [Mbox]: https://en.wikipedia.org/wiki/Mbox
 [RDF]: https://www.w3.org/TR/rdf12-primer/
+[Rust]: https://rust-lang.org
