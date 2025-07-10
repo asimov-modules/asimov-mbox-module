@@ -11,8 +11,11 @@ links:
 provides:
   programs:
     - asimov-mbox-cataloger
+    - asimov-mbox-fetcher
 
 handles:
+  url_protocols:
+    - file
   file_extensions:
     - .mbox
     - .mbx
