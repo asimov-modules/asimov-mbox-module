@@ -31,9 +31,15 @@ cargo install asimov-mbox-module
 
 ## 👉 Examples
 
+### Email Import from an Mbox File
+
+#### Cataloging email messages in the mbox
+
 ```bash
 asimov-mbox-cataloger file:/path/to/messages.mbox
 ```
+
+#### Fetching a specific email message
 
 ```bash
 asimov-mbox-fetcher file:/path/to/messages.mbox#mid
