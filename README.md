@@ -66,8 +66,8 @@ Options:
       --license          Show license information
   -v, --verbose...       Enable verbose output (may be repeated for more verbosity)
   -V, --version          Print version information
-  -n, --limit <COUNT>    The maximum number of messages to catalog
-  -o, --output <FORMAT>  The output format
+  -n, --limit <COUNT>    Limit the number of messages to catalog
+  -o, --output <FORMAT>  Set the output format [default: cli] [possible values: cli, json, jsonld, jsonl]
   -h, --help             Print help
 ```
 
