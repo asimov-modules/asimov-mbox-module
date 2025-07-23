@@ -9,7 +9,9 @@
 
 ## ✨ Features
 
-- To be determined!
+- Parses email messages from `.mbox` files and outputs them as [JSON-LD].
+- Constructs a semantic knowledge graph based on the [KNOW] ontology.
+- Distributed as a standalone static binary with zero runtime dependencies.
 
 ## 🛠️ Prerequisites
 
@@ -37,6 +39,12 @@ cargo install asimov-mbox-module
 
 ```bash
 asimov-mbox-cataloger file:/path/to/messages.mbox
+```
+
+#### Exporting email messages in the mbox as JSON
+
+```bash
+asimov-mbox-cataloger file:/path/to/messages.mbox -o json
 ```
 
 #### Fetching a specific email message
