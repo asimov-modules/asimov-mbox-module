@@ -20,5 +20,5 @@ handles:
     - .mbox
     - .mbx
   content_types:
-   - application/mbox
-   - text/x-mail
+    - application/mbox
+    - text/x-mail
